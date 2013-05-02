@@ -19,7 +19,7 @@ class ePDO extends PDO
         global $cache, $conf;
         if ( $cache ) {
             $q = (int) $cache->get( $conf['db_hash'] . '__nq' );
-            $q += $this->numQuery;
+            $q += $this->queryCount;
             $cache->set( $conf['db_hash'] . '__nq', $q );
         }
     }
