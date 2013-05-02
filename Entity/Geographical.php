@@ -8,7 +8,8 @@ namespace \PBase\Entity;
 class Geographical extends General
 {
     
-    public function coordinates() {
+    public function coordinates()
+    {
         $q = $this->db->prepare("
             SELECT X(geo), Y(geo) FROM ". static::$_t . " WHERE id = :id");
         $q->bindParam(':id', $this->id);
@@ -20,11 +21,13 @@ class Geographical extends General
         }
     }
     
-    public function latlng() {
+    public function latlng()
+    {
         return $this->coordinates()[0].', '.$this->coordinates()[1];
     }
     
-    public function locateByCoordinates($x, $y) {
+    public function locateByCoordinates($x, $y)
+    {
         $x = (double) $x;
         $y = (double) $y;
         $q = $this->db->prepare("
@@ -33,13 +36,15 @@ class Geographical extends General
         return $q->execute();
     }
     
-    public function locateByString($string) {
+    public function locateByString($string)
+    {
         $g = new Geocoder($string);
         if (!$g->results) { return false; }
         return $this->locateByCoordinates($g->results[0]->lat, $g->results[0]->lng);
     }
     
-    public static function filterByRadius ( $lat, $lng, $radius, $_array ) {
+    public static function filterByRadius ( $lat, $lng, $radius, $_array )
+    {
         $lat = (double) $lat;
         $lng = (double) $lng;
         $radius = (float) $radius;
@@ -68,12 +73,14 @@ class Geographical extends General
         return $t;
     }
     
-    public function hasLocation() {
+    public function hasLocation()
+    {
         $c = $this->coordinates();
         return (bool) $c[0] && $c[1];
     }
     
-    protected function __create () { 
+    protected function __create ()
+    { 
         $this->id = $this->generateID();
         $q = $this->db->prepare("
             INSERT INTO ". static::$_t ."

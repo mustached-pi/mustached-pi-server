@@ -14,8 +14,8 @@ class Geocoder
     const GEOCODING_URL =
     'http://maps.googleapis.com/maps/api/geocode/json?sensor=false&language=it&address=';
      
-    public function __construct( $query ) {
-        
+    public function __construct( $query )
+    {
         $res = [
             'civico'    =>  [ 'street_number', 'long_name' ],
             'via'       =>  [ 'route', 'long_name' ],

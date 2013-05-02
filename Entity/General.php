@@ -21,15 +21,17 @@ class General
     public
             $id;
     
-    public function __construct ( $id = null ) {
+    public function __construct ( $id = null )
+    {
         global $db, $cache;
         $this->db = $db;
         if ( $this->_cacheable ) {
             $this->cache = $cache;
         }
-        /* Check esistenza */
+        /* Check existance */
         if ( self::__exists($id) ) {
-            /* Scaricamento */
+            /* Download database record */
+            $this->onBeforeLoad();
             $this->id = $id;
             if ( $this->cache ) {
                 if ( $this->_v = unserialize( $this->cache->get( $conf['db_hash'] . static::$_t . ':' . $id . ':___fields') ) ) {
@@ -44,19 +46,21 @@ class General
             if ( $this->cache ) {
                 $this->cache->set($conf['db_hash'] . static::$_t . ':' . $id . ':___fields', serialize($this->_v));
             }
+            $this->onPostLoad();
         } elseif ( $id === null ) {
             /* Create a new one */
             $this->__create();
             $this->__construct($this->id);
         } else {
             /* Doesnt exist ! */
-            $e = new \PBase\Exception\General(1003);
+            $e = new \PBase\Exception\General(404);
             $e->extra = static::$_t. ':' . $id;
             throw $e;
         }
     }
     
-    public static function by($_name, $_value) {
+    public static function by($_name, $_value)
+    {
         global $db;
         $entita = get_called_class();
         $q = $db->prepare("
@@ -68,7 +72,8 @@ class General
         return new $entita($r[0]);
     }
 
-    public static function filter($_array, $_order = null) {
+    public static function filter($_array, $_order = null)
+    {
         global $db;
         $entity = get_called_class();
         $_conditions = [];
@@ -93,7 +98,8 @@ class General
         return $t;
     }
     
-    public static function all($order = '') {
+    public static function all($order = '')
+    {
         global $db;
         $entity = get_called_class();
         if ( $order ) { 
@@ -131,11 +137,13 @@ class General
         return $t;
     } */
     
-    public function __toString() {
+    public function __toString()
+    {
         return $this->id;
     }
     
-    public static function __exists ( $id = null ) {
+    public static function __exists ( $id = null )
+    {
         if (!$id) { return false; }
         global $db, $cache, $conf;
         if ($cache) {
@@ -154,7 +162,11 @@ class General
         return $y;
     }
     
-    protected function generateID() {
+    /*
+     * Overrideable ID generator function
+     */
+    protected function generateID()
+    {
         $q = $this->db->prepare("
             SELECT MAX(id) FROM ". static::$_t );
         $q->execute();
@@ -163,17 +175,25 @@ class General
         return (int) $r[0] + 1;
     }
     
-    protected function __create () { 
-        $this->id = $this->generaId();
+    protected function __create ()
+    { 
+        $this->onBeforeCreate();
+        do {
+            $this->id = $this->generateID();
+        } while ( $this->__exists($this->id) );
         $q = $this->db->prepare("
             INSERT INTO ". static::$_t ."
             (id) VALUES (:id)");
         $q->bindParam(':id', $this->id);
-        return $q->execute();
+        $r = $q->execute();
+        $this->onPostCreate();
+        return $r;
     }
     
-    public function __get ( $_name ) {
+    public function __get ( $_name )
+    {
         global $conf;
+        $this->onBeforeGet($_name);
         if ( $this->cache ) {
             $r = $this->cache->get($conf['db_hash'] . static::$_t . ':' . $this->id . ':' . $_name);
             if ( $r !== false ) {
@@ -206,12 +226,15 @@ class General
         if ( $this->cache ) {
             $this->cache->set($conf['db_hash'] . static::$_t . ':' . $this->id . ':' . $_name, $r);
         }
+        $this->onPostGet($_name);
         return $r;
     }
     
 
-    public function __set ( $_name, $_value ) {
+    public function __set ( $_name, $_value )
+    {
         global $conf;
+        $this->onBeforeSet( $_name, $_value );
         if ( array_key_exists($_name, $this->_v) ) {
             /* Internal property */
             $q = $this->db->prepare("
@@ -256,10 +279,13 @@ class General
         if ( $this->cache ) {
             $this->cache->set($conf['db_hash'] . static::$_t . ':' . $this->id . ':' . $_name, $_value);
         }
+        $this->onPostSet($_name, $_value);
     }
     
-    public function delete() {
+    public function delete()
+    {
         global $conf;
+        $this->onBeforeDelete();
         $this->deleteDetails();
         $q = $this->db->prepare("
             DELETE FROM ". static::$_t ." WHERE id = :id");
@@ -268,14 +294,33 @@ class General
         if ( $this->cache ) {
             $this->cache->delete($conf['db_hash'] . static::$_t . ':' . $this->id);
         }
+        $this->onPostDelete();
     }
     
-    private function deleteDetails() {
+    private function deleteDetails()
+    {
         if ( !static::$_dt ) { return true; }
         $q = $this->db->prepare("
             DELETE FROM ". static::$_dt ." WHERE id = :id");
         $q->bindParam(':id', $this->id);
         return $q->execute();
     }
+    
+    /* Event ovveridable functions */
+    
+    public function onBeforeCreate  () {}
+    public function onPostCreate    () {}
+    
+    public function onBeforeLoad    () {}
+    public function onPostLoad      () {}
+    
+    public function onBeforeSet     ( $name = null, $value = null ) {}
+    public function onPostSet       ( $name = null, $value = null ) {}
+    
+    public function onBeforeGet     ( $name = null ) {}
+    public function onPostGet       ( $name = null ) {}
+    
+    public function onBeforeDelete  () {}
+    public function onPostDelete    () {}
 
 }

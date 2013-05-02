@@ -14,7 +14,8 @@ class General extends Exception
             $timestamp,
             $extra = null;
     
-    public function __construct($code = 1000) {
+    public function __construct($code = 1000)
+    {
         global $conf;
         $this->code = $code;
         if (isset($conf['errors'][$code])) {
@@ -26,11 +27,13 @@ class General extends Exception
         parent::__construct($this->message, $code, null);
     }
     
-    public function __toString() {
+    public function __toString()
+    {
         return date('YmdHis', $this->timestamp) . " [ERR #" . $this->code . "]: " . $this->message . "\t{$this->extra}\n";
     }
 	
-    public function toJSON() {
+    public function toJSON()
+    {
         return [
             'error' => [
                 'code'      =>	$this->code,
