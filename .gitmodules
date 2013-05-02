@@ -1,0 +1,6 @@
+[submodule "lib/PBase"]
+	path = lib/PBase
+	url = git://github.com/AlfioEmanueleFresta/PBase.git
+[submodule "lib/vendor/PBase"]
+	path = lib/vendor/PBase
+	url = git://github.com/AlfioEmanueleFresta/PBase.git
