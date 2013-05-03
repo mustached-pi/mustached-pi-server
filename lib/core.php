@@ -20,3 +20,9 @@ spl_autoload_register( function () {
     $fileName .= str_replace('_', DIRECTORY_SEPARATOR, $className) . '.php';
     require 'lib/vendor/' . $fileName;
 });
+
+/*
+ * Create the user session
+ */
+$session = new \MPi\Entity\Session(@$_COOKIE['sid']);
+setcookie('sid', $session->id);

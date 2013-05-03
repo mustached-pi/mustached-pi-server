@@ -4,6 +4,8 @@
  * (c)2013 The Mustached Pi Project
  */
 
+require 'lib/core.php';
+
 ?>
 <!DOCTYPE html>
 <html>
@@ -12,7 +14,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>The Mustached Pi Projects</title>
     <meta name="description" content="Let your Pi grow mustaches">
-    <meta name="author" content="Alfio Emanuele Fresta <alfio.emanuele.f@gmail.com>, Angelo Lupo <angelolupo94@gmail.com>">
+    <meta name="author" content="Alfio Emanuele Fresta <alfio.emanuele.f@gmail.com>,
+          Angelo Lupo <angelolupo94@gmail.com>">
     <link rel="shortcut icon" href="/img/favicon.ico" />
 
     <!-- CSS -->
@@ -60,45 +63,20 @@
       }
       ?>
 
-      <div class="jumbotron">
-        <h1>Super awesome marketing speak!</h1>
-        <p class="lead">Cras justo odio, dapibus ac facilisis in, egestas eget quam. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut fermentum massa justo sit amet risus.</p>
-        <a class="btn btn-large btn-success" href="#">Sign up today</a>
-      </div>
-
-      <hr>
-
-      <div class="row-fluid marketing">
-        <div class="span6">
-          <h4>Subheading</h4>
-          <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
-
-          <h4>Subheading</h4>
-          <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum.</p>
-
-          <h4>Subheading</h4>
-          <p>Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
-        </div>
-
-        <div class="span6">
-          <h4>Subheading</h4>
-          <p>Donec id elit non mi porta gravida at eget metus. Maecenas faucibus mollis interdum.</p>
-
-          <h4>Subheading</h4>
-          <p>Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Cras mattis consectetur purus sit amet fermentum.</p>
-
-          <h4>Subheading</h4>
-          <p>Maecenas sed diam eget risus varius blandit sit amet non magna.</p>
-        </div>
-      </div>
-
+      
       <hr>
 
       <div class="footer">
-        <p>&copy; Company 2013</p>
+        <p>&copy;<?php echo date('Y'); ?> The Mustached Pi Project
+            <br />
+            <span class='muted'>
+                We're <a href="//github.com/AlfioEmanueleFresta">Fresta</a> and
+                <a href="//github.com/AngeloLupo">Lupo</a>, btw.
+            </span>
+         </p>
       </div>
 
-    </div> <!-- /container -->
+    </div>
 
   </body>
 </html>
