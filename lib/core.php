@@ -5,10 +5,17 @@
  */
 
 /*
+ * DEBUGGING - Show Errors
+ */
+ini_set('display_errors', 1);
+error_reporting(E_ALL ^ E_NOTICE);
+
+
+/*
  * Standard PSR-0 autoloader, adapted from:
  * https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md
  */
-spl_autoload_register( function () {
+spl_autoload_register( function ( $className ) {
     $className = ltrim($className, '\\');
     $fileName  = '';
     $namespace = '';

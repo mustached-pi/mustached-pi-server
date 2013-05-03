@@ -4,7 +4,7 @@
  * (c)2013 The Mustached Pi Project
  */
 
-namespace \MPi\Entity;
+namespace MPi\Entity;
 class Session extends \PBase\Entity\Session
 {
     
