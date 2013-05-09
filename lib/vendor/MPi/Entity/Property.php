@@ -8,6 +8,10 @@ namespace MPi\Entity;
 class Property extends \PBase\Entity\General
 {
     
+    protected static
+        $_t     = 'properties',
+        $_dt    = 'properties_data';
+    
     public function user() {
         return new User($this->user);
     }

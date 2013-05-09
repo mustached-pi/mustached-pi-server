@@ -8,6 +8,10 @@ namespace MPi\Entity;
 class User extends \PBase\Entity\General
 {
     
+    protected static
+        $_t     = 'users',
+        $_dt    = 'users_data';
+    
     public function houses() {
         $r = [];
         foreach ( Property::filter([['user' => $this->id]]) as $property ) {
