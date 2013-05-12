@@ -1,0 +1,30 @@
+<?php
+
+/*
+ * ©2013 The Mustached Pi Project
+ */
+
+/*
+ * === INSTRUCTIONS ===
+ * 1) Edit your database name (DB_NAME) and eventually the host (localhost)
+ * 2) Edit your db username and password
+ * 3) Rename this file to database.conf.php
+ * 4) Enjoy!
+ */
+
+/*
+ * Your database configuration
+ */
+$conf['db'] = [
+    'dsn'       =>  'mysql:host=localhost;dbname=DB_NAME',
+    'username'  =>  'DB_USERNAME',
+    'password'  =>  'DB_PASSWORD'
+];
+
+/*
+ * Database hash - for caching purposes.
+ * Its an unique string that identifies the 
+ * database connection among installations.
+ * Generally it does not need to be changed.
+ */
+$conf['db_hash'] = md5( $conf['db']['dsn'] . $conf['db']['username'] );

@@ -26,4 +26,8 @@ class User extends \PBase\Entity\General
         }
     }
     
+    public function changePassword($password) {
+        return ( $this->password = encryptPassword($password) );
+    }
+    
 }

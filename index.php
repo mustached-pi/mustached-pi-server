@@ -5,6 +5,7 @@
  */
 
 require 'lib/core.php';
+$me = $session->user();
 
 ?>
 <!DOCTYPE html>

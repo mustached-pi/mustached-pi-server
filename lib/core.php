@@ -10,7 +10,6 @@
 ini_set('display_errors', 1);
 error_reporting(E_ALL ^ E_NOTICE);
 
-
 /*
  * Standard PSR-0 autoloader, adapted from:
  * https://github.com/php-fig/fig-standards/blob/master/accepted/PSR-0.md
@@ -25,8 +24,44 @@ spl_autoload_register( function ( $className ) {
         $fileName  = str_replace('\\', DIRECTORY_SEPARATOR, $namespace) . DIRECTORY_SEPARATOR;
     }
     $fileName .= str_replace('_', DIRECTORY_SEPARATOR, $className) . '.php';
-    require 'lib/vendor/' . $fileName;
+    include 'lib/vendor/' . $fileName;
 });
+
+/*
+ * Loads the configuration files specified in $_toLoad
+ */
+$_toLoad = ['database'];
+foreach ( $_toLoad as $_confFile ) {
+    if ( !file_exists( 'conf/' . $_confFile . '.conf.php' ) ) {
+        throw new \PBase\Exception\General(1005);
+    }
+    require 'conf/' . $_confFile . '.conf.php';
+}
+
+/*
+ * Loads the function files specified in $_toLoad
+ */
+$_toLoad = ['pages', 'strings'];
+foreach ( $_toLoad as $_libFile ) {
+    if ( !file_exists( 'lib/functions/' . $_libFile . '.php' ) ) {
+        throw new \PBase\Exception\General(1005);
+    }
+    require 'lib/functions/' . $_libFile . '.php';
+}
+
+/*
+ * Connects to the configured database
+ * (sample conf. in /conf/database.conf.php.sample)
+ */
+$db = new \PBase\Database\Connection(
+    $conf['db']['dsn'],
+    $conf['db']['username'],
+    $conf['db']['password']
+);
+
+if ( !$db ) {
+    throw new \PBase\Exception\General(1006);
+}
 
 /*
  * Create the user session
