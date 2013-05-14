@@ -21,6 +21,7 @@ $me = $session->user();
 
     <!-- CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="css/bootstrap-responsive.min.css" rel="stylesheet" media="screen">
     <link href="css/font-awesome.min.css" rel="stylesheet" media="screen">
     <link href="css/main.css" rel="stylesheet" media="screen">
     <link href="http://code.jquery.com/ui/1.9.2/themes/base/jquery-ui.css" rel="stylesheet" media="screen">
@@ -39,11 +40,14 @@ $me = $session->user();
 
       <div class="masthead">
         <ul class="nav nav-pills pull-right">
-          <li class="active"><a href="?p=home">Home</a></li>
+          <li><a href="?p=home">Home</a></li>
           <li><a href="?p=project">The Project</a></li>
           <li><a href="?p=login">Login</a></li>
         </ul>
-        <h3 class="muted">The Mustached Pi Project</h3>
+        <h3 class="muted">
+            <img src="img/mustaches_small.png" />
+            The Mustached Pi Project
+        </h3>
       </div>
 
       <hr>

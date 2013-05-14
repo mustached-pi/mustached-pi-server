@@ -30,8 +30,8 @@ body {
 
 .pattern {
     border-radius: 4px;
-    padding-top: 20px;
-    padding-bottom: 20px;
+    padding-top: 30px;
+    padding-bottom: 30px;
     background-repeat: repeat;
 }
 
@@ -42,5 +42,5 @@ body {
 .antipattern {
     background-color: white;
     border-radius: 4px;
-    box-shadow: 0px 0px 4px black;
+    box-shadow: 0px 0px 6px black;
 }
