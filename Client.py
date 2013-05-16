@@ -1,14 +1,16 @@
-#Librerie
-#import RPi.GPIO as GPIO
+#Libraries
+import RPi.GPIO as GPIO
 import urllib2
 import time
 import json
 import random
+
 #Setting up GPIO notation
-#GPIO.setmode(GPIO.BCM)
+GPIO.setmode(GPIO.BCM)
 
 #Defining MUX's GPIO (Multiplexer Out)
 MUXIO = 22
+
 #Defining ALE's GPIO (ALE= Address Latch Enable)
 ALE     = 0
 BASEURL = "http://mustached-pi.alfioemanuele.it/fresta"
@@ -19,10 +21,12 @@ def aleOn():
 	GPIO.output(ALE, GPIO.HIGH)
 	GPIO.output(ALE, GPIO.LOW)
 
+#read value from ports set as input
 def read():
 	GPIO.setup(MUXIO, GPIO.IN)
 	return GPIO.input(MUXIO)
 
+#give an impulsive signal to MUX'S out -> changes flip flop's state
 def pulse():
 	GPIO.setup(MUXIO, GPIO.OUT)
 	GPIO.ouput(MUXIO, GPIO.HIGH)
@@ -58,52 +62,51 @@ def setPort(port):
 
 
 
-#lettura codice univoco dispositivo
-#fi=open('MID.txt', 'r')
-#MID=fi
-#Richiesta iniziale -> Invia il codice univoco e riceve un array coi valori desiderati dei sensori
-#azzeramanto arrayprec
-arrayprec = {}
-																			#modificare MID
-f=urllib2.urlopen(BASEURL + '/endpoint.php', json.dumps({'sid':SID}))
-arrayconf=f.read()
-print arrayconf
-arrayconf=json.loads(arrayconf)
-#ciclo infinito
-while 1:
-#Ciclo -> Controlla le porte dall'array ricevuto all'inizio/al ciclo prec., salva i valori dei sensori e lo stato delle porte
-#-> dopo averlo cambiato se differente dalla configurazione.
-#->Invia l'array risultato e ottiene come risposta un array di configurazione aggiornato.
-#-> Cicla all'infinito <3
+#Reads MID (Machine ID) from client
+fi=open('MID.txt', 'r')
+MID=fi
 
-	#inizializza un'array
+#Sets to 0 the array which contains the previous configuration
+arrayprec = {}
+
+#Send MID and ask for a configuration array
+f=urllib2.urlopen(BASEURL + '/endpoint.php', json.dumps({'sid':MID}))
+arrayconf=f.read()
+arrayconf=json.loads(arrayconf)
+
+#infinite loop
+while 1:
+#Loop -> changes the switch value if different from the previous configuration
+#     -> saves values from sensors
+
+	#creates new array
 	arrayread={}
 	print arrayconf['ports']
-	#controlla l'array ricevuto dal server
+	#Checks the array from the server
 	for (port, value) in arrayconf['ports'].iteritems():
-		#porta il mux alla porta giusta
-		#setPort(port)
+		#Setting up MUX port
+		setPort(port)
 		#Case output
 		if value["type"]=="output":
 			if value["value"]!=arrayprec.get(port, 0):
-				# pulse()
+				pulse()
 				print "pulse"
 				arrayprec[port]=value["value"]
 		#Case input
 		if value["type"]=="input":
-			#arrayread[port]=read()
+			arrayread[port]=read()
 			temp = random.randint(0,255)
 			arrayread[port]=temp
 
-	#Converte l'array in json
-		#sistemare MID
-	arrayread={'sid': SID, 'ports': arrayread}
+	#Converts the array in JSON
+	arrayread={'sid': MID, 'ports': arrayread}
 	arrayread=json.dumps(arrayread)
-	#invia l'array con un post
+	#send array
 	f=urllib2.urlopen( BASEURL + '/endpoint.php',arrayread)
-	#legge la risposta HTTP
+	#read HTTP response
 	arrayconf=f.read()
 	print arrayconf
-	#Converte il json in un array
+	#Converts JSON json from server in array
 	arrayconf=json.loads(arrayconf)
-	time.sleep(1)
+	#One HTTP request every 5 seconds
+	time.sleep(5)
