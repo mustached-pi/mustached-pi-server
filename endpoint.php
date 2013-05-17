@@ -13,6 +13,12 @@ $request = file_get_contents("php://input");
 $request = json_decode($request);
 
 $house  = \MPi\Entity\House::by('code', $request->sid);
+if (!$house) {
+    echo json_encode([
+        'house' =>  false
+    ]);
+    die();
+}
 
 if ( $request && isset($request->ports) ) {
     foreach ( $request->ports as $port => $input ) {
