@@ -14,10 +14,56 @@ class House extends \PBase\Entity\General
     
     public function users() {
         $r = [];
-        foreach ( Property::filter([['house' => $this->id]]) as $property ) {
+        foreach ( Property::filter(['house' => $this->id]) as $property ) {
             $r[] = $property->user();
         }
         return $r;
     }
-            
+    
+    public function ports() {
+        global $db;
+        $q = "  SELECT t.id FROM 
+                    ( SELECT * FROM ports
+                      WHERE house = :house
+                      ORDER BY timestamp DESC
+                    ) t
+                GROUP BY (t.num)
+                ORDER BY num ASC
+        ";
+        $q = $db->prepare($q);
+        $q->bindValue(':house', $this->id);
+        $q->execute();
+        $r = [];
+        while ( $k = $q->fetch(\PDO::FETCH_NUM) ) {
+            $t      = new Port($k[0]);
+            $r[$t->num] = $t; 
+        }
+        return $r;
+    }
+    
+    public function instances() {
+        $k = $this->ports();
+        $r = [];
+        foreach ( $k as $a => $b ) {
+            $r[$a] = $b->instance();
+        }
+        return $r;
+    }
+    
+    public function instancesToJSON() {
+        $k = $this->instances();
+        $r = [];
+        foreach ( $k as $n => $y ) {
+            $r[$n] = $y->toJSON();
+        }
+        return $r;
+    }
+    
+    public function toJSON() {
+        return [
+            'name'      =>  $this->name,
+            'address'   =>  $this->address
+        ];
+    }
+    
 }

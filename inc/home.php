@@ -13,9 +13,6 @@ privatePage();
         <h3><i class="icon-user"></i> You</h3>
         <p><strong><?php echo $me->name; ?></strong><br /><?php echo $me->email; ?></p>
         <p><a href="#"><i class="icon-pencil"></i> Edit details or password</a>.</p>
-        <hr />
-        <p><a class="btn btn-inverse" href="?p=logout">Log me out</a>.</p>
-   
     </div>
     
     <div class="span8">
@@ -33,7 +30,12 @@ privatePage();
 
         <ul>
             <?php foreach ( $houses as $house ) { ?>
-                <li><?php echo $house->name; ?></li>
+                <li>
+                    <a href="?p=dash&id=<?php echo $house->id; ?>" class="">
+                        <strong><?php echo $house->name; ?></strong>
+                    </a><br />
+                    <?php echo $house->address; ?><br />
+                </li>
             <?php } ?>
         </ul>
         
@@ -41,7 +43,9 @@ privatePage();
         <p class="text-error"><i class="icon-warning-sign"></i> No houses yet!</p>
         <?php } ?>
         
-        <p><a href="#" class="btn"><i class="icon-plus"></i> Click here to add a new house</a></p>
+        <p><a href="?p=house.new" class="btn btn-small btn-block">
+                <i class="icon-plus"></i> Click here to add a new house
+            </a></p>
         
         
     </div>

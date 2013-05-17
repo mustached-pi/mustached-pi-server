@@ -42,7 +42,11 @@ $me = $session->user();
         <ul class="nav nav-pills pull-right">
           <li><a href="?p=home">Home</a></li>
           <li><a href="?p=project">The Project</a></li>
-          <li><a href="?p=login">Login</a></li>
+          <?php if ( $me ) { ?>
+            <li><a href="?p=logout">Logout</a></li>
+          <?php } else { ?>
+            <li><a href="?p=login">Login</a></li>
+          <?php } ?>
         </ul>
         <h3 class="muted">
             <img src="img/mustaches_small.png" />

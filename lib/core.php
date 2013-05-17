@@ -30,7 +30,7 @@ spl_autoload_register( function ( $className ) {
 /*
  * Loads the configuration files specified in $_toLoad
  */
-$_toLoad = ['database'];
+$_toLoad = ['database', 'constants'];
 foreach ( $_toLoad as $_confFile ) {
     if ( !file_exists( 'conf/' . $_confFile . '.conf.php' ) ) {
         throw new \PBase\Exception\General(1005);
