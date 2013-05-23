@@ -27,6 +27,12 @@ $house = new \MPi\Entity\House($house);
                 </div>
             </div>
             <div class="control-group">
+                <label class="control-label" for="inputName">Port name</label>
+                <div class="controls">
+                    <input type="text" id="inputName" name="inputName" value="Port" />
+                </div>
+            </div>           
+            <div class="control-group">
                 <label class="control-label" for="inputType">Direction</label>
                 <div class="controls">
                     <select name="inputType" required>

@@ -9,12 +9,13 @@ $house  = new \MPi\Entity\House($house);
 
 $type   = (int) $_POST['inputType'];
 $num    = (int) $_POST['inputNum'];
+$name   = toUppercase($_POST['inputName']);
 
 $p = new \MPi\Entity\Port();
 $p->house   = $house->id;
 $p->num     = $num;
 $p->type    = $type;
-$p->name    = 'PORT';
+$p->name    = $name;
 $p->timestamp = time();
 
 if ( $type == INPUT ) {
