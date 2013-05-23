@@ -35,6 +35,27 @@ class Port extends \PBase\Entity\General
         }
     }
     
+    public function values() {
+        $q = "SELECT id FROM input
+              WHERE house = :house
+              AND   num   = :num
+              AND   timestamp >= :min
+              AND   timestamp <= :max
+              ORDER BY
+                timestamp ASC";
+        $q = $this->db->prepare($q);
+        $q->bindValue(':house', $this->house,   \PDO::PARAM_INT);
+        $q->bindValue(':num',   $this->num,     \PDO::PARAM_INT);
+        $q->bindValue(':min', $this->timestamp()->format('U'),  \PDO::PARAM_INT);
+        $q->bindValue(':max', $this->valid()->format('U'),      \PDO::PARAM_INT);
+        $q->execute();
+        $r = [];
+        while ( $k = $q->fetch(\PDO::FETCH_NUM) ) {
+            $r[] = new Input($k[0]);
+        }
+        return $r;        
+    }
+    
     public function onPostCreate() {
         $this->timestamp = time();
     }

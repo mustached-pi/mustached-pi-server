@@ -58,21 +58,28 @@ $house  = new \MPi\Entity\House($id);
                     </strong>
                 <?php } else { ?>
                     <?php if ( $i->value ) { ?>
-                        <i class="icon-circle text-success"></i>
+                        <i class="icon-circle text-success"></i> On
                     <?php } else { ?>
-                        <i class="icon-circle-blank text-error"></i>
+                        <i class="icon-circle-blank text-error"></i> Off
                     <?php } ?>
                 <?php } ?>
+                        
+                        <br />
 
                 <?php if ( $i instanceof MPi\Entity\Output ) { ?>
-                    (<a href="?p=port.change&house=<?php echo $house->id; ?>&num=<?php echo $port->num; ?>">
-                        <i class="icon-bolt"></i> Change
-                    </a>)
+                    <a href="?p=port.change&house=<?php echo $house->id; ?>&num=<?php echo $port->num; ?>">
+                       <i class="icon-bolt"></i> Change
+                    </a>
+                <?php } else { ?>
+                    <a href="?p=graph&id=<?php echo $port->id; ?>" title="Statistics">
+                        <i class="icon-bar-chart"></i> Graph
+                    </a>
                 <?php } ?>
 
             </td>
-            <td><?php echo $i->timestamp()->format('d-m-Y H:i:s'); ?></td>
-            <td><?php echo $port->timestamp()->format('d-m-Y H:i:s'); ?></td>
+            <td><small><?php echo $i->timestamp()->format('d-m-Y H:i:s'); ?></small></td> 
+            <td><small><?php echo $port->timestamp()->format('d-m-Y H:i:s'); ?></small></td>
+
         </tr>
         <?php } ?>
 
