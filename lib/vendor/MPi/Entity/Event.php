@@ -20,16 +20,24 @@ class Event extends \PBase\Entity\General
         return \DateTime::createFromFormat('U', $this->start);
     }
     
-    public function end() {
-        if ( $this->end ) {
-            return \DateTime::createFromFormat('U', $this->end);
+    public function stop() {
+        if ( $this->stop ) {
+            return \DateTime::createFromFormat('U', $this->stop);
         } else {
             return false;
         }
     }
     
     public function alive() {
-        return !((bool) $this->end);
+        return !((bool) $this->stop);
+    }
+    
+    public function upload($movie) {
+        @mkdir('upload');
+        $name = sha1 ( rand(1000, 9999) . microtime() );
+        $move = move_uploaded_file($movie['tmp_name'], "upload/{$name}");
+        $this->movie = $name;
+        return $move;
     }
     
 }

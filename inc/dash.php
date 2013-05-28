@@ -22,6 +22,14 @@ $house  = new \MPi\Entity\House($id);
     </div>
 </div>
 
+<!-- Refresh every ten seconds -->
+<meta http-equiv="refresh" content="6" />
+     
+<div class="alert alert-info">
+    <i class="icon-refresh"></i> <strong>Watching mode</strong>: This page automatically refreshes itself every 6 seconds.
+</div>
+
+
 <hr />
 
 <!-- Fired events box -->
@@ -36,13 +44,54 @@ $house  = new \MPi\Entity\House($id);
         <?php
         $events = $house->lastEvents(10);
         ?>
-        <table class="table table-condensed">
+        <table class="table table-condensed table-bordered">
+            <thead>
+                <th>Ref.#</th>
+                <th>Started</th>
+                <th>Finished</th>
+                <th>Movie</th>
+            </thead>
+            <?php if (!$events) { ?>
+            <tr class="success">
+                <td colspan="4" class="align-center">
+                    <i class="icon-thumbs-up"></i>
+                    <strong>No events fired. That's a good thing.</strong>
+                </td>
+            </tr>
+            <?php } ?>
+            
+            <?php foreach ( $events as $event ) { ?>
+            <tr <?php if ( $event->alive() ) { ?>class='warning'<?php } ?>>
+                <td><code><?php echo $event->id; ?></code></td>
+                <td><?php echo $event->start()->format('d-m-Y H:i:s'); ?></td>
+                <td>
+                    <?php if ( $event->alive() ) { ?>
+                        <i class='icon-warning-sign'></i> <strong>Happening now</strong>
+                    <?php } else { ?>
+                        <?php echo $event->stop()->format('d-m-Y H:i:s'); ?>
+                    <?php } ?>
+                </td>
+                <td>
+                    <?php if ( $event->movie ) { ?>
+                        <a href="upload/<?php echo $event->movie; ?>">
+                            <i class="icon-download-alt"></i>
+                            Download
+                        </a>
+                    <?php } else { ?>
+                        <i class="icon-spin icon-spinner"></i>
+                        Uploading...
+                    <?php } ?>
+                </td>
+            </tr>
+            <?php } ?>
             
             
         </table>
     </div>
     
 </div>
+
+<hr />
 
 
 <div class="row-fluid">
