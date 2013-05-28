@@ -22,6 +22,29 @@ $house  = new \MPi\Entity\House($id);
     </div>
 </div>
 
+<hr />
+
+<!-- Fired events box -->
+<div class="row-fluid">
+    
+    <div class="span3">
+        <h3><i class="icon-fire"></i> Events</h3>
+        <p>Tracks movements.</p>
+    </div>
+    
+    <div class="span9">
+        <?php
+        $events = $house->lastEvents(10);
+        ?>
+        <table class="table table-condensed">
+            
+            
+        </table>
+    </div>
+    
+</div>
+
+
 <div class="row-fluid">
     <table class="table table-bordered table-striped">
 

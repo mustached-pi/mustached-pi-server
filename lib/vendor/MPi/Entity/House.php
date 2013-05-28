@@ -66,4 +66,26 @@ class House extends \PBase\Entity\General
         ];
     }
     
+    public function events() {
+        return Event::filter([
+            'house' =>  $this->id
+        ], 'start DESC');
+    }
+    
+    public function lastEvents( $num = 10 ) {
+        $num = (int) $num;
+        return Event::filter([
+            'house' =>  $this->id
+        ], "start DESC LIMIT 0, {$num}");
+    }
+    
+    public function lastEvent() {
+        $k = $this->lastEvents(1);
+        if ( !$k ) {
+            return false;
+        } else {
+            return $k[0];
+        }
+    }
+    
 }
