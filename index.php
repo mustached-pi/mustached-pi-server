@@ -32,6 +32,7 @@ $me = $session->user();
     <script type="text/javascript" src="http://code.jquery.com/ui/1.9.2/jquery-ui.js"></script>
     <script type="text/javascript" src="js/jquery.cookie.js"></script>
     <script type="text/javascript" src="js/jquery.flot.min.js"></script>
+    <script type="text/javascript" src="js/jquery.flot.time.min.js"></script>
     <!--[if lte IE 8]><script language="javascript" type="text/javascript" src="js/excanvas.min.js"></script><![endif]-->
     <script type="text/javascript" src="js/main.js"></script>
   </head>
