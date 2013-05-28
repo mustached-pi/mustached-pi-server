@@ -32,6 +32,13 @@ $num = count($r);
     <i class="icon-refresh"></i> <strong>Watching mode</strong>: This page automatically refreshes itself every 10 seconds.
 </div>
 
+<?php if ( !$num ) { ?>
+<div class="alert alert-error">
+    <i class="icon-warning-sign"></i> <strong>No data found</strong>:
+    Please check the sensor is connected properly to the MPi device.
+</div>
+<?php } ?>
+
 <div class="row-fluid">
     <div class="span4 align-center">
         <h2>Port graph</h2>
